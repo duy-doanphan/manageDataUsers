@@ -1,7 +1,7 @@
 import axios from './customize-axios'
 
 const fetchAllUser = (page) => {
-    return(
+    return (
         axios.get(`/api/users?page=${page}`)
     )
 }
