@@ -57,6 +57,7 @@ const TableUser = (props) => {
                 </tbody>
             </Table>
             <ReactPaginate
+                className='pagination d-flex justify-content-center'
                 nextLabel="Next"
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={3}
