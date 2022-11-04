@@ -2,11 +2,18 @@ import Table from 'react-bootstrap/Table';
 import {useEffect, useState} from "react";
 import {fetchAllUser} from "../sevices/UserService";
 import ReactPaginate from "react-paginate";
+import ModalAddNewUser from "./ModalAddNewUser";
 
 const TableUser = (props) => {
     const [listUser, setListUser] = useState([])
     const [totalUser, setTotalUser] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
+
+    const [showModalAddNewUser, setShowModalAddNewUser] = useState(false);
+    const handleClose = () => setShowModalAddNewUser(false);
+    const handleAddNewUser = () => {
+        setShowModalAddNewUser(true)
+    }
 
     useEffect(() => {
         // call apis
@@ -23,10 +30,22 @@ const TableUser = (props) => {
     }
     const handlePageClick = (event) => {
         getAllUser(+event.selected + 1)
+    }
 
+    const handleUpdateTable = (user) => {
+        setListUser([user,...listUser])
     }
     return (
         <>
+            <div className='my-3 d-flex justify-content-between align-items-center'>
+                <span> <b>List User: </b></span>
+                <button
+                    className='btn btn-success'
+                    onClick={()=>{handleAddNewUser()
+                    }}
+                >Add New Users
+                </button>
+            </div>)
             <Table striped bordered hover>
                 <thead>
                 <tr>
@@ -56,6 +75,11 @@ const TableUser = (props) => {
                 }
                 </tbody>
             </Table>
+            <ModalAddNewUser
+                show={showModalAddNewUser}
+                handleClose={handleClose}
+                handleUpdateTable = {handleUpdateTable}
+            ></ModalAddNewUser>
             <ReactPaginate
                 className='pagination d-flex justify-content-center'
                 nextLabel="Next"
@@ -77,6 +101,8 @@ const TableUser = (props) => {
                 activeClassName="active"
                 renderOnZeroPageCount={null}
             />
+
+
         </>
     )
 }
