@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {createUser} from '../sevices/UserService'
+import {createUser, postCreateUser} from '../sevices/UserService'
 import {useState} from "react";
 import {toast} from "react-toastify";
 
@@ -10,7 +10,7 @@ const ModalAddNewUser = (props) => {
     const [name,setName] = useState('')
     const [job,setJob] = useState('')
     const handleSubmit = async () => {
-        let res = await createUser(name, job);
+        let res = await postCreateUser(name, job);
         if (!name) {
             toast.error('InValid Name!')
             return;
@@ -23,10 +23,8 @@ const ModalAddNewUser = (props) => {
             handleClose();
             setName('')
             setJob('')
-            toast.success('Okela')
+            toast.success('Create User Succeed! !')
             handleUpdateTable({first_name:name, id:res.id})
-        } else {
-            toast.error('Error')
         }
     }
     return (

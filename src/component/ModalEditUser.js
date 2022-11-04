@@ -1,22 +1,37 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {createUser} from '../sevices/UserService'
+import {putUpdateUser} from '../sevices/UserService'
 import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-
+import data from "bootstrap/js/src/dom/data";
 
 const ModalEditUser = (props) => {
-    const {show, handleClose,dataUserEdit} = props;
-    const [name,setName] = useState('')
-    const [job,setJob] = useState('')
-    const handleEditUser = () => {
-
+    const {show, handleClose, dataUserEdit, handleEditUserFromModal} = props;
+    const [name, setName] = useState('')
+    const [job, setJob] = useState('')
+    const handleEditUser = async () => {
+        let res = await putUpdateUser(name, job);
+        if (!name) {
+            toast.error('InValid Name!')
+            return;
+        }
+        if (res && res.updatedAt) {
+         //success
+            handleEditUserFromModal({
+                first_name:name,
+                id : dataUserEdit.id,
+                job: job
+            })
+            handleClose();
+            toast.success('Update User Succeed!')
+        }
     }
-    useEffect(()=>{
+    useEffect(() => {
         if (show) {
             setName(dataUserEdit.first_name)
+            setJob(dataUserEdit.job)
         }
-    },[dataUserEdit])
+    }, [dataUserEdit])
     return (
         <>
             <Modal show={show} onHide={handleClose} backdrop={"static"}>
@@ -31,7 +46,9 @@ const ModalEditUser = (props) => {
                                 type="text"
                                 className="form-control"
                                 value={name}
-                                onChange={(event)=>{setName(event.target.value)}}
+                                onChange={(event) => {
+                                    setName(event.target.value)
+                                }}
                             />
                         </div>
                         <div className="mb-3">
@@ -40,7 +57,9 @@ const ModalEditUser = (props) => {
                                 type="text"
                                 className="form-control"
                                 value={job}
-                                onChange={(event)=>{setJob(event.target.value)}}
+                                onChange={(event) => {
+                                    setJob(event.target.value)
+                                }}
                             />
                         </div>
                     </form>
@@ -49,7 +68,9 @@ const ModalEditUser = (props) => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={()=>{handleEditUser()}}>
+                    <Button variant="primary" onClick={() => {
+                        handleEditUser()
+                    }}>
                         Comfirm
                     </Button>
                 </Modal.Footer>
