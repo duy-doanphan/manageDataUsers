@@ -1,39 +1,27 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {createUser} from '../sevices/UserService'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 
 
-const ModalAddNewUser = (props) => {
-    const {show, handleClose,handleUpdateTable} = props;
+const ModalEditUser = (props) => {
+    const {show, handleClose,dataUserEdit} = props;
     const [name,setName] = useState('')
     const [job,setJob] = useState('')
-    const handleSubmit = async () => {
-        let res = await createUser(name, job);
-        if (!name) {
-            toast.error('InValid Name!')
-            return;
-        }
-        if (!job) {
-            toast.error('InValid Job!')
-            return;
-        }
-        if (res && res.id) {
-            handleClose();
-            setName('')
-            setJob('')
-            toast.success('Okela')
-            handleUpdateTable({first_name:name, id:res.id})
-        } else {
-            toast.error('Error')
-        }
+    const handleEditUser = () => {
+
     }
+    useEffect(()=>{
+        if (show) {
+            setName(dataUserEdit.first_name)
+        }
+    },[dataUserEdit])
     return (
         <>
             <Modal show={show} onHide={handleClose} backdrop={"static"}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add New Use</Modal.Title>
+                    <Modal.Title>Edit User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form>
@@ -61,8 +49,8 @@ const ModalAddNewUser = (props) => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={()=>{handleSubmit()}}>
-                        Create User
+                    <Button variant="primary" onClick={()=>{handleEditUser()}}>
+                        Comfirm
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -70,4 +58,4 @@ const ModalAddNewUser = (props) => {
     );
 }
 
-export default ModalAddNewUser;
+export default ModalEditUser;

@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {fetchAllUser} from "../sevices/UserService";
 import ReactPaginate from "react-paginate";
 import ModalAddNewUser from "./ModalAddNewUser";
+import ModalEditUser from "./ModalEditUser";
+
 
 const TableUser = (props) => {
     const [listUser, setListUser] = useState([])
@@ -10,9 +12,23 @@ const TableUser = (props) => {
     const [totalPage, setTotalPage] = useState(0)
 
     const [showModalAddNewUser, setShowModalAddNewUser] = useState(false);
-    const handleClose = () => setShowModalAddNewUser(false);
+    const [showModalEditUser, setShowModalEditUser] = useState(false);
+
+    const [dataUserEdit, setDataUserEdit] =useState({})
+
+    const handleClose = () => {
+        setShowModalAddNewUser(false)
+        setShowModalEditUser(false)
+    }
     const handleAddNewUser = () => {
         setShowModalAddNewUser(true)
+    }
+    const handleEditUser = (user) => {
+        setDataUserEdit(user);
+        setShowModalEditUser(true)
+    }
+    const handleUpdateTable = (user) => {
+        setListUser([user, ...listUser])
     }
 
     useEffect(() => {
@@ -32,20 +48,18 @@ const TableUser = (props) => {
         getAllUser(+event.selected + 1)
     }
 
-    const handleUpdateTable = (user) => {
-        setListUser([user,...listUser])
-    }
     return (
         <>
             <div className='my-3 d-flex justify-content-between align-items-center'>
                 <span> <b>List User: </b></span>
                 <button
                     className='btn btn-success'
-                    onClick={()=>{handleAddNewUser()
+                    onClick={() => {
+                        handleAddNewUser()
                     }}
                 >Add New Users
                 </button>
-            </div>)
+            </div>
             <Table striped bordered hover>
                 <thead>
                 <tr>
@@ -53,6 +67,7 @@ const TableUser = (props) => {
                     <th>Email</th>
                     <th>First Name</th>
                     <th>Last Name</th>
+                    <th>Action</th>
 
                 </tr>
                 </thead>
@@ -66,7 +81,11 @@ const TableUser = (props) => {
                                 <td>{item.first_name}</td>
                                 <td>{item.last_name}</td>
                                 <td>
-                                    <button className='btn btn-primary mx-3'>Update</button>
+                                    <button
+                                        className='btn btn-primary mx-3'
+                                        onClick={()=>{handleEditUser(item)}}
+                                    >Edit
+                                    </button>
                                     <button className='btn btn-danger'>Delete</button>
                                 </td>
                             </tr>
@@ -78,8 +97,15 @@ const TableUser = (props) => {
             <ModalAddNewUser
                 show={showModalAddNewUser}
                 handleClose={handleClose}
-                handleUpdateTable = {handleUpdateTable}
+                handleUpdateTable={handleUpdateTable}
             ></ModalAddNewUser>
+            <ModalEditUser
+                show={showModalEditUser}
+                handleClose={handleClose}
+                dataUserEdit={dataUserEdit}
+            >
+
+            </ModalEditUser>
             <ReactPaginate
                 className='pagination d-flex justify-content-center'
                 nextLabel="Next"
@@ -101,8 +127,6 @@ const TableUser = (props) => {
                 activeClassName="active"
                 renderOnZeroPageCount={null}
             />
-
-
         </>
     )
 }
