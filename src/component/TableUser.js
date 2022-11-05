@@ -5,6 +5,7 @@ import ReactPaginate from "react-paginate";
 import ModalAddNewUser from "./ModalAddNewUser";
 import ModalEditUser from "./ModalEditUser";
 import _ from "lodash";
+import ModalComfirm from "./ModalComfirm";
 
 
 const TableUser = (props) => {
@@ -14,12 +15,15 @@ const TableUser = (props) => {
 
     const [showModalAddNewUser, setShowModalAddNewUser] = useState(false);
     const [showModalEditUser, setShowModalEditUser] = useState(false);
+    const [showModalDeleteUser, setShowModalDelete] = useState(false)
 
     const [dataUserEdit, setDataUserEdit] =useState({})
+    const [dataUserDelete, setDataUserDelete] =useState({})
 
     const handleClose = () => {
         setShowModalAddNewUser(false)
         setShowModalEditUser(false)
+        setShowModalDelete(false)
     }
     const handleAddNewUser = () => {
         setShowModalAddNewUser(true)
@@ -27,6 +31,10 @@ const TableUser = (props) => {
     const handleEditUser = (user) => {
         setDataUserEdit(user);
         setShowModalEditUser(true)
+    }
+    const handleDeleteUser = (user) => {
+        setShowModalDelete(true);
+        setDataUserDelete(user)
     }
     const handleUpdateTable = (user) => {
         setListUser([user, ...listUser])
@@ -93,7 +101,10 @@ const TableUser = (props) => {
                                         onClick={()=>{handleEditUser(item)}}
                                     >Edit
                                     </button>
-                                    <button className='btn btn-danger'>Delete</button>
+                                    <button
+                                        className='btn btn-danger'
+                                        onClick={()=>{handleDeleteUser(item)}}
+                                    >Delete</button>
                                 </td>
                             </tr>
                         )
@@ -112,8 +123,12 @@ const TableUser = (props) => {
                 dataUserEdit={dataUserEdit}
                 handleEditUserFromModal={handleEditUserFromModal}
             >
-
             </ModalEditUser>
+            <ModalComfirm
+                show={showModalDeleteUser}
+                handleClose={handleClose}
+                dataUserDelete={dataUserDelete}
+            ></ModalComfirm>
             <ReactPaginate
                 className='pagination d-flex justify-content-center'
                 nextLabel="Next"
