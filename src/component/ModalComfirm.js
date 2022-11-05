@@ -1,12 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
+import {deleteUser} from '../sevices/UserService'
 
 const ModalComfirm = (props) => {
     const {show, handleClose,dataUserDelete} = props;
 
-    const handleDelete = () => {
-        alert('me')
+    const handleDelete = async () => {
+        let res = await deleteUser(dataUserDelete.id);
+        console.log(res)
     }
     return (
         <>
