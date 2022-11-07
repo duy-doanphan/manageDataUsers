@@ -5,7 +5,7 @@ import {fetchAllUser} from "../sevices/UserService";
 import ReactPaginate from "react-paginate";
 import ModalAddNewUser from "./ModalAddNewUser";
 import ModalEditUser from "./ModalEditUser";
-import _ from "lodash";
+import _, {debounce} from "lodash";
 import ModalComfirm from "./ModalComfirm";
 
 
@@ -22,7 +22,9 @@ const TableUser = (props) => {
     const [dataUserDelete, setDataUserDelete] = useState({})
 
     const [sortBy, setSortBy] = useState('asc')
-    const [sortFied,setSortFied] = useState('id')
+    const [sortFied, setSortFied] = useState('id')
+
+    const [keyword, setKeyword] = useState('')
 
     const handleClose = () => {
         setShowModalAddNewUser(false)
@@ -59,9 +61,19 @@ const TableUser = (props) => {
         setSortBy(sortBy)
         setSortFied(sortFied)
         let cloneListUsers = _.cloneDeep(listUser)
-        cloneListUsers = _.orderBy(cloneListUsers,[sortFied],[sortBy])
+        cloneListUsers = _.orderBy(cloneListUsers, [sortFied], [sortBy])
         setListUser(cloneListUsers)
     }
+    const handleSearch = debounce((event) => {
+        let term = event.target.value;
+        if (term) {
+            let cloneListUsers = _.cloneDeep(listUser)
+            cloneListUsers = cloneListUsers.filter(item => item.email.includes(term))
+            setListUser(cloneListUsers)
+        } else {
+            getAllUser(1)
+        }
+    },500)
 
     useEffect(() => {
         // call apis
@@ -92,6 +104,16 @@ const TableUser = (props) => {
                 >Add New Users
                 </button>
             </div>
+            <div className='col-6 my-3'>
+                <input
+                    className='form-control'
+                    placeholder=' Search user by email'
+                    // value={keyword}
+                    onChange={(event) => {
+                        handleSearch(event)
+                    }}
+                />
+            </div>
             <Table striped bordered hover>
                 <thead>
                 <tr>
@@ -101,13 +123,15 @@ const TableUser = (props) => {
                             <span>
                             <i
                                 className="fa-solid fa-arrow-down"
-                                onClick={()=>{
-                                    handleSort('desc','id')
+                                onClick={() => {
+                                    handleSort('desc', 'id')
                                 }}
                             ></i>
                             <i
                                 className="fa-solid fa-arrow-up"
-                                onClick={()=>{handleSort('asc','id')}}
+                                onClick={() => {
+                                    handleSort('asc', 'id')
+                                }}
                             ></i>
                         </span>
                         </div>
@@ -119,13 +143,15 @@ const TableUser = (props) => {
                             <span>
                             <i
                                 className="fa-solid fa-arrow-down"
-                                onClick={()=>{
-                                    handleSort('desc','first_name')
+                                onClick={() => {
+                                    handleSort('desc', 'first_name')
                                 }}
                             ></i>
                             <i
                                 className="fa-solid fa-arrow-up"
-                                onClick={()=>{handleSort('asc','first_name')}}
+                                onClick={() => {
+                                    handleSort('asc', 'first_name')
+                                }}
                             ></i>
                         </span>
                         </div>
@@ -182,7 +208,7 @@ const TableUser = (props) => {
                 show={showModalDeleteUser}
                 handleClose={handleClose}
                 dataUserDelete={dataUserDelete}
-                handleDeleteUserFromModal ={handleDeleteUserFromModal}
+                handleDeleteUserFromModal={handleDeleteUserFromModal}
             ></ModalComfirm>
             <ReactPaginate
                 className='pagination d-flex justify-content-center'
