@@ -17,8 +17,8 @@ const TableUser = (props) => {
     const [showModalEditUser, setShowModalEditUser] = useState(false);
     const [showModalDeleteUser, setShowModalDelete] = useState(false)
 
-    const [dataUserEdit, setDataUserEdit] =useState({})
-    const [dataUserDelete, setDataUserDelete] =useState({})
+    const [dataUserEdit, setDataUserEdit] = useState({})
+    const [dataUserDelete, setDataUserDelete] = useState({})
 
     const handleClose = () => {
         setShowModalAddNewUser(false)
@@ -36,13 +36,19 @@ const TableUser = (props) => {
         setShowModalDelete(true);
         setDataUserDelete(user)
     }
+
     const handleUpdateTable = (user) => {
         setListUser([user, ...listUser])
     }
     const handleEditUserFromModal = (user) => {
         let cloneListUsers = _.cloneDeep(listUser)
-        let index =listUser.findIndex(item=>item.id === user.id)
+        let index = listUser.findIndex(item => item.id === user.id)
         cloneListUsers[index].first_name = user.first_name
+        setListUser(cloneListUsers)
+    }
+    const handleDeleteUserFromModal = (user) => {
+        let cloneListUsers = _.cloneDeep(listUser)
+        cloneListUsers = cloneListUsers.filter(item => item.id !== user.id);
         setListUser(cloneListUsers)
     }
 
@@ -98,13 +104,18 @@ const TableUser = (props) => {
                                 <td>
                                     <button
                                         className='btn btn-primary mx-3'
-                                        onClick={()=>{handleEditUser(item)}}
+                                        onClick={() => {
+                                            handleEditUser(item)
+                                        }}
                                     >Edit
                                     </button>
                                     <button
                                         className='btn btn-danger'
-                                        onClick={()=>{handleDeleteUser(item)}}
-                                    >Delete</button>
+                                        onClick={() => {
+                                            handleDeleteUser(item)
+                                        }}
+                                    >Delete
+                                    </button>
                                 </td>
                             </tr>
                         )
@@ -128,6 +139,7 @@ const TableUser = (props) => {
                 show={showModalDeleteUser}
                 handleClose={handleClose}
                 dataUserDelete={dataUserDelete}
+                handleDeleteUserFromModal ={handleDeleteUserFromModal}
             ></ModalComfirm>
             <ReactPaginate
                 className='pagination d-flex justify-content-center'

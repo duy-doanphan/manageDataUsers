@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import {putUpdateUser} from '../sevices/UserService'
 import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import data from "bootstrap/js/src/dom/data";
+
 
 const ModalEditUser = (props) => {
     const {show, handleClose, dataUserEdit, handleEditUserFromModal} = props;
