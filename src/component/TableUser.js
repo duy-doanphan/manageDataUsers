@@ -7,6 +7,7 @@ import ModalAddNewUser from "./ModalAddNewUser";
 import ModalEditUser from "./ModalEditUser";
 import _, {debounce} from "lodash";
 import ModalComfirm from "./ModalComfirm";
+import {CSVLink, CSVDownload} from "react-csv";
 
 
 const TableUser = (props) => {
@@ -73,7 +74,7 @@ const TableUser = (props) => {
         } else {
             getAllUser(1)
         }
-    },500)
+    }, 500)
 
     useEffect(() => {
         // call apis
@@ -92,17 +93,38 @@ const TableUser = (props) => {
         getAllUser(+event.selected + 1)
     }
 
+    const csvData = [
+        ["firstname", "lastname", "email"],
+        ["Ahmed", "Tomi", "ah@smthing.co.com"],
+        ["Raed", "Labes", "rl@smthing.co.com"],
+        ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+    ];
+
     return (
         <>
             <div className='my-3 d-flex justify-content-between align-items-center'>
                 <span> <b>List User: </b></span>
-                <button
-                    className='btn btn-success'
-                    onClick={() => {
-                        handleAddNewUser()
-                    }}
-                >Add New Users
-                </button>
+                <div className='group-btns'>
+                    <label className='btn btn-warning' htmlFor='test'>
+                        <i className="fa-solid fa-file-import"></i> Import
+                    </label>
+                    <input id='test' type='file' hidden />
+
+                    <CSVLink
+                        data={csvData}
+                        filename={"User.csv"}
+                        className="btn btn-primary"
+                    > <i className="fa-solid fa-download"></i> Export</CSVLink>
+
+                    <button
+                        className='btn btn-success'
+                        onClick={() => {
+                            handleAddNewUser()
+                        }}
+                    ><i className="fa-solid fa-plus"></i>
+                        Add New
+                    </button>
+                </div>
             </div>
             <div className='col-6 my-3'>
                 <input
