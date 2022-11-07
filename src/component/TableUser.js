@@ -1,4 +1,5 @@
 import Table from 'react-bootstrap/Table';
+import './TableUser.scss'
 import {useEffect, useState} from "react";
 import {fetchAllUser} from "../sevices/UserService";
 import ReactPaginate from "react-paginate";
@@ -19,6 +20,9 @@ const TableUser = (props) => {
 
     const [dataUserEdit, setDataUserEdit] = useState({})
     const [dataUserDelete, setDataUserDelete] = useState({})
+
+    const [sortBy, setSortBy] = useState('asc')
+    const [sortFied,setSortFied] = useState('id')
 
     const handleClose = () => {
         setShowModalAddNewUser(false)
@@ -49,6 +53,13 @@ const TableUser = (props) => {
     const handleDeleteUserFromModal = (user) => {
         let cloneListUsers = _.cloneDeep(listUser)
         cloneListUsers = cloneListUsers.filter(item => item.id !== user.id);
+        setListUser(cloneListUsers)
+    }
+    const handleSort = (sortBy, sortFied) => {
+        setSortBy(sortBy)
+        setSortFied(sortFied)
+        let cloneListUsers = _.cloneDeep(listUser)
+        cloneListUsers = _.orderBy(cloneListUsers,[sortFied],[sortBy])
         setListUser(cloneListUsers)
     }
 
@@ -84,9 +95,41 @@ const TableUser = (props) => {
             <Table striped bordered hover>
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>
+                        <div className='sort-header'>
+                            <span>ID</span>
+                            <span>
+                            <i
+                                className="fa-solid fa-arrow-down"
+                                onClick={()=>{
+                                    handleSort('desc','id')
+                                }}
+                            ></i>
+                            <i
+                                className="fa-solid fa-arrow-up"
+                                onClick={()=>{handleSort('asc','id')}}
+                            ></i>
+                        </span>
+                        </div>
+                    </th>
                     <th>Email</th>
-                    <th>First Name</th>
+                    <th>
+                        <div className='sort-header'>
+                            <span>First name</span>
+                            <span>
+                            <i
+                                className="fa-solid fa-arrow-down"
+                                onClick={()=>{
+                                    handleSort('desc','first_name')
+                                }}
+                            ></i>
+                            <i
+                                className="fa-solid fa-arrow-up"
+                                onClick={()=>{handleSort('asc','first_name')}}
+                            ></i>
+                        </span>
+                        </div>
+                    </th>
                     <th>Last Name</th>
                     <th>Action</th>
 
