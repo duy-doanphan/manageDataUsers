@@ -8,6 +8,8 @@ import ModalEditUser from "./ModalEditUser";
 import _, {debounce} from "lodash";
 import ModalComfirm from "./ModalComfirm";
 import {CSVLink, CSVDownload} from "react-csv";
+import Papa from "papaparse";
+import {toast} from "react-toastify";
 
 
 const TableUser = (props) => {
@@ -110,6 +112,25 @@ const TableUser = (props) => {
             done()
         }
     }
+    const handleImport = (event) => {
+        if (event.target && event.target.files && event.target.files[0]) {
+            let file = event.target.files[0];
+            if (file.type !== 'text/csv') {
+                toast.error('Only accpet csv files... ')
+                return;
+            }
+
+            Papa.parse(file, {
+                header: true,
+                complete: function (results) {
+                    let file = results.data
+                    {
+                        file && setListUser(file)
+                    }
+                }
+            })
+        }
+    }
     return (
         <>
             <div className='my-3 d-flex justify-content-between align-items-center'>
@@ -118,7 +139,14 @@ const TableUser = (props) => {
                     <label className='btn btn-warning' htmlFor='test'>
                         <i className="fa-solid fa-file-import"></i> Import
                     </label>
-                    <input id='test' type='file' hidden/>
+                    <input
+                        id='test'
+                        type='file'
+                        hidden
+                        onChange={(event) => {
+                            handleImport(event)
+                        }}
+                    />
 
                     <CSVLink
                         separator=";"
@@ -193,7 +221,6 @@ const TableUser = (props) => {
                     </th>
                     <th>Last Name</th>
                     <th>Action</th>
-
                 </tr>
                 </thead>
                 <tbody>
