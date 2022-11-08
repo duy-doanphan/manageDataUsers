@@ -1,4 +1,4 @@
-import videoHomePage from '../assest/video-homepage.mp4'
+import videoHomePage from '../../assest/video-homepage.mp4'
 import './Home.scss'
 
 const Home = (props) => {
