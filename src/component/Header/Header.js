@@ -19,7 +19,7 @@ const Header = (props) => {
         <>
             <Navbar bg='light' expand="lg">
                 <Container>
-                    <Navbar.Brand href="/">Phan Duy</Navbar.Brand>
+                    <NavLink to={'/'} className='nav-link fs-5'>Phan Duy</NavLink>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto" activeKey='/'>
