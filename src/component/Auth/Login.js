@@ -1,15 +1,25 @@
 import './Login.scss'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {loginApi} from "../../sevices/UserService";
 import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 const Login = (props) => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
+    const [loginAPI,setLoginAPI] = useState(false)
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
+
+    useEffect(()=>{
+        let token = localStorage.getItem('token');
+        if (token) {
+            navigate('/')
+        }
+    },[])
     const validateEmail = (email) => {
         return String(email)
             .toLowerCase()
@@ -18,45 +28,42 @@ const Login = (props) => {
             );
     };
     const handleLogin = async () => {
-
         if (!email) {
             toast.error('Missing email!')
-            return
         }
         if (!password) {
             toast.error('Missing password!')
-            return;
         }
         if (validateEmail(email)) {
-            let res = await loginApi('eve.holt@reqres.in', 'cityslicka');
-            console.log(res)
+            setLoginAPI(true);
+            let res = await loginApi(email,password);
             if (res && res.token) {
+                navigate('/')
                 localStorage.setItem('token',res.token)
+                toast.success('Login suceed!')
+            } else {
+                //error
+                if (res && res.status === 400){
+                    toast.error(res.data.error)
+                }
             }
+            setLoginAPI(false)
         } else {
             toast.error('Email invalidate')
-            return;
         }
-
-
-        // if (+res.status === 400 ) {
-        //     toast.error('Invalid Email/Password!')
-        //     return
-        // } else {
-        //     console.log(res)
-        // }
     }
 
     return (
         <>
             <div className='login-container col-12 col-sm-4'>
                 <div className='title '>Login</div>
-                <div className='text'>Email or user name</div>
-                <input type='text' placeholder='Email or username...' value={email} onChange={(event) => {
+                <div className='text'>Email (eve.holt@reqres.in)</div>
+                <input type='text' value={email} onChange={(event) => {
                     setEmail(event.target.value)
                 }}/>
                 <div className='input-password'>
-                    <input type={showPassword ? 'text' : 'password'} placeholder='Password' value={password}
+                    <div className='text'>Password</div>
+                    <input type={showPassword ? 'text' : 'password'} value={password}
                            onChange={(event) => {
                                setPassword(event.target.value)
                            }}/>
@@ -70,7 +77,8 @@ const Login = (props) => {
                     onClick={() => {
                         handleLogin()
                     }}
-                >Login
+                > {loginAPI && <i className="fa-solid fa-circle-notch fa-spin"></i> }
+                    &nbsp; Login
                 </button>
                 <div className='back-home'>{`<<< Go back home`}</div>
             </div>

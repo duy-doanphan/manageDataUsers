@@ -3,9 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {NavLink,useNavigate} from "react-router-dom";
-
-
-
+import {toast} from "react-toastify";
 
 const Header = (props) => {
     const navigate = useNavigate();
@@ -13,13 +11,15 @@ const Header = (props) => {
         navigate('./login')
     }
     const handleLogout = () => {
+        localStorage.removeItem('token')
         navigate('./')
+        toast.success('Logout Suceed!')
     }
     return (
         <>
             <Navbar bg='light' expand="lg">
                 <Container>
-                    <NavLink to={'/'} className='nav-link fs-5'>Phan Duy</NavLink>
+                    <NavLink to={'/'} className='nav-link fs-5 mx-3'>Phan Duy</NavLink>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto" activeKey='/'>
