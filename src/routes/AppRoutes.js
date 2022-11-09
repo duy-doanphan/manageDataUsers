@@ -9,7 +9,7 @@ const AppRoutes = () => {
     return(
         <>
             <Routes>
-                <Route path='/manageDataUsers' element={<Home></Home>}></Route>
+                <Route path='/' element={<Home></Home>}></Route>
                 <Route path="/login" element={<Login></Login>}></Route>
                 <Route
                     path={'/users'}
@@ -19,6 +19,7 @@ const AppRoutes = () => {
                         </PrivateRoute>
                     }
                 ></Route>
+
                 <Route path={'*'} element={<NotFound></NotFound>}></Route>
             </Routes>
         </>
