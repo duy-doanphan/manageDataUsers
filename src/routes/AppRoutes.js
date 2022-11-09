@@ -9,17 +9,16 @@ const AppRoutes = () => {
     return(
         <>
             <Routes>
-                <Route path='/' element={<Home></Home>}></Route>
-                <Route path="/login" element={<Login></Login>}></Route>
+                <Route path='/manageUser' element={<Home></Home>}></Route>
+                <Route path="/manageUser/user" element={<Login></Login>}></Route>
                 <Route
-                    path={'/users'}
+                    path={'/manageUser/users'}
                     element={
                         <PrivateRoute>
                             <TableUser></TableUser>
                         </PrivateRoute>
                     }
                 ></Route>
-
                 <Route path={'*'} element={<NotFound></NotFound>}></Route>
             </Routes>
         </>
