@@ -1,10 +1,12 @@
 import './Login.scss'
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {loginApi} from "../../sevices/UserService";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
+import {UserContext} from "../../Context/UserContext";
 
 const Login = (props) => {
+    const {loginContext} = useContext(UserContext)
     const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -14,12 +16,12 @@ const Login = (props) => {
         setShowPassword(!showPassword)
     }
 
-    useEffect(()=>{
-        let token = localStorage.getItem('token');
-        if (token) {
-            navigate('/')
-        }
-    },[])
+    // useEffect(()=>{
+    //     let token = localStorage.getItem('token');
+    //     if (token) {
+    //         navigate('/')
+    //     }
+    // },[])
     const validateEmail = (email) => {
         return String(email)
             .toLowerCase()
@@ -38,8 +40,8 @@ const Login = (props) => {
             setLoginAPI(true);
             let res = await loginApi(email,password);
             if (res && res.token) {
+                loginContext(email,res.token)
                 navigate('/')
-                localStorage.setItem('token',res.token)
                 toast.success('Login suceed!')
             } else {
                 //error
@@ -80,7 +82,7 @@ const Login = (props) => {
                 > {loginAPI && <i className="fa-solid fa-circle-notch fa-spin"></i> }
                     &nbsp; Login
                 </button>
-                <div className='back-home'>{`<<< Go back home`}</div>
+                <div onClick={()=>{navigate('/')}} className='back-home'>{`<<< Go back home`}</div>
             </div>
         </>
 
