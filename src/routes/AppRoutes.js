@@ -3,6 +3,7 @@ import Home from "../component/Home/Home";
 import TableUser from "../component/TableUser";
 import Login from "../component/Auth/Login";
 import PrivateRoute from "./PrivateRoute";
+import NotFound from "./NotFound";
 
 const AppRoutes = () => {
     return(
@@ -18,6 +19,7 @@ const AppRoutes = () => {
                         </PrivateRoute>
                     }
                 ></Route>
+                <Route path={'*'} element={<NotFound></NotFound>}></Route>
             </Routes>
         </>
     )
