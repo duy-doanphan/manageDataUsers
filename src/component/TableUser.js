@@ -27,7 +27,6 @@ const TableUser = (props) => {
     const [sortBy, setSortBy] = useState('asc')
     const [sortFied, setSortFied] = useState('id')
 
-    const [keyword, setKeyword] = useState('')
     const [dataExport, setDataExport] = useState([])
 
     const handleClose = () => {
@@ -167,11 +166,11 @@ const TableUser = (props) => {
                     </button>
                 </div>
             </div>
+            {/*Sreach*/}
             <div className='col-12 col-sm-4 my-3'>
                 <input
                     className='form-control '
                     placeholder=' Search user by email'
-                    // value={keyword}
                     onChange={(event) => {
                         handleSearch(event)
                     }}

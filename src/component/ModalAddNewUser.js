@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {createUser, postCreateUser} from '../sevices/UserService'
+import {postCreateUser} from '../sevices/UserService'
 import {useState} from "react";
 import {toast} from "react-toastify";
 
@@ -24,7 +24,7 @@ const ModalAddNewUser = (props) => {
             setName('')
             setJob('')
             toast.success('Create User Succeed! !')
-            handleUpdateTable({first_name:name, id:res.id})
+            handleUpdateTable({first_name:name, id:res.id , job: res.job})
         }
     }
     return (

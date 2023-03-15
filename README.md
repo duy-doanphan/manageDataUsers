@@ -8,7 +8,7 @@
     </ul>
     <h3> Framework and library</h3>
     <ul>
-        <li>BootStrap 5</li>
+        
         <li>React-router-dom</li>
         <li>Axios</li>
         <li>Lodash</li>

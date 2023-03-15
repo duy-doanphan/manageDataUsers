@@ -77,8 +77,8 @@ const Login = (props) => {
                     }} className={showPassword ? 'fa-solid fa-eye ' : ' fa-solid fa-eye-slash'}></i>
                 </div>
                 <button
-                    className={email || password ? 'active' : ''}
-                    disabled={email || password ? false : true}
+                    className={email && password ? 'active' : ''}
+                    disabled={email && password ? false : true}
                     onClick={() => {
                         handleLogin()
                     }}
